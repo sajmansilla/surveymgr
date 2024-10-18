@@ -1,6 +1,28 @@
-const { DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
 
-const Participant = sequelize.define('participant', {});
+class Participant extends Model {}
+
+Participant.init({
+  team_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true
+  },
+  person_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    primaryKey: true
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  sequelize,
+  modelName: 'Participant',
+  tableName: 'participants', // Cambia esto si es necesario
+  timestamps: true
+});
 
 module.exports = Participant;

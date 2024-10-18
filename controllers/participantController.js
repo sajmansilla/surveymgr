@@ -1,7 +1,7 @@
 const { Participant, Team, Person } = require('../models');
 
 // Función para crear la relación entre una persona y un equipo
-const addParticipant = async (personId, teamId) => {
+const addParticipant = async (personId, teamId, role) => {
   try {
     // Verificar si la relación ya existe
     let participant = await Participant.findOne({
@@ -13,6 +13,7 @@ const addParticipant = async (personId, teamId) => {
       participant = await Participant.create({
         team_id: teamId,
         person_id: personId,
+        role: role
       });
       console.log(`Participant created: person ${personId} in team ${teamId}`);
     } else {

@@ -10,7 +10,7 @@ const Person = sequelize.define('person', {
     type: DataTypes.STRING,
     unique: true,
     allowNull: false,
-  },
+  }
 });
 
 module.exports = Person;
