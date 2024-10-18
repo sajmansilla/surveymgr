@@ -1,8 +1,8 @@
 const express = require('express');
-const { registerPerson } = require('../controllers/personController');
+const { registerPeople } = require('../controllers/personController');
 const router = express.Router();
 
-// Endpoint para registrar personas y equipos
-router.post('/register', registerPerson);
+// Endpoint to register people and teams
+router.post('/register', registerPeople);
 
 module.exports = router;

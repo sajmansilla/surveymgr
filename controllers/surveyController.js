@@ -1,7 +1,10 @@
-const { Survey } = require('../models');
+const { Survey, Team, Person, ParticipXSurvey } = require('../models');
+const crypto = require('crypto');
+const { getTeam } = require('./teamController'); // Utilizaremos esta función para verificar la existencia de equipos.
+
 
 const createSurvey = async (req, res) => {
-  const { name, date_start, date_end } = req.body;
+  const { name, date_start, date_end, teams } = req.body;
 
   try {
     // Validar el formato del nombre de la encuesta
@@ -12,7 +15,48 @@ const createSurvey = async (req, res) => {
     // Crear la nueva survey
     const survey = await Survey.create({ name, date_start, date_end });
 
-    res.status(201).json({ message: 'Survey created successfully', survey });
+    // Verificar la existencia de los equipos.
+    const nonexistentTeams = [];
+    const existingTeams = [];
+
+    for (const teamName of teams) {
+      const team = await getTeam(teamName);
+      if (team) {
+        existingTeams.push(team);
+      } else {
+        nonexistentTeams.push(teamName);
+      }
+    }
+
+    // Iterar sobre los equipos existentes y crear relaciones en `particip_x_survey`.
+    for (const team of existingTeams) {
+      // Obtener los participantes del equipo.
+      const persons = await Person.findAll({ 
+        include: [{
+          model: Team,
+          where: { id: team.id },
+        }]
+      });
+
+      // Crear una relación por cada participante.
+      for (const person of persons) {
+        const participantHash = crypto.createHash('sha256').update(person.email).digest('hex');
+
+        await ParticipXSurvey.create({
+          survey_id: survey.id,
+          participant: participantHash,
+          team_id: team.id,
+        });
+      }
+    }
+
+    // Devolver la respuesta con los equipos inexistentes, si los hay.
+    res.status(201).json({
+      message: 'Survey created successfully',
+      survey,
+      nonexistentTeams,
+    });
+    
   } catch (error) {
     console.error('Error creating survey:', error);
     if (error.name === 'SequelizeUniqueConstraintError') {
