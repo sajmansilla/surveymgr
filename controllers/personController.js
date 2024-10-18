@@ -2,21 +2,21 @@ const { Person, Team } = require('../models');
 const { addParticipant } = require('./participantController');
 const { fixTeam } = require('./teamController');
 
-// Función para registrar una nueva persona.
+// Function to create a new person
 const registerPerson = async (email, name, teamName, teamRole) => {
-  // Verificar si el equipo está definido y obtenerlo (o crearlo).
+  // If the team doesn't exist, it's created.
   let team;
   if (teamName) {
     team = await fixTeam(teamName);
+    // If a team is given, it must include the role as well.
     if (!teamRole) {
       throw new Error('Role is required when team is specified.');
     }
   }
 
-  // Crear la nueva persona.
+  // Persist the new person.
   const person = await Person.create({ email, name });
 
-  // Si se proporciona un equipo, agregar la persona como participante con rol.
   if (team) {
     await addParticipant(person.id, team.id, teamRole);
   }
@@ -24,25 +24,25 @@ const registerPerson = async (email, name, teamName, teamRole) => {
   return person;
 };
 
-// Función para actualizar una persona existente.
+// Function to update an existing person.
 const updatePerson = async (person, name, teamName, teamRole) => {
-  // Actualizar la persona con el nuevo nombre.
+  // Update the person with the new name.
   await person.update({ name });
 
-  // Si se proporciona un nombre de equipo, obtenerlo y actualizar el rol.
+  // If a team name is provided, get it and update the role.
   if (teamName) {
     const team = await fixTeam(teamName);
     if (!teamRole) {
       throw new Error('Role is required when team is specified.');
     }
-    // Agregar o actualizar la persona como participante al equipo con rol.
+    // Add or update the person as a participant in the team with a role.
     await addParticipant(person.id, team.id, teamRole);
   }
 
   return person;
 };
 
-// Función para manejar la solicitud de registro de personas.
+// Function to handle the request for registering people.
 const registerPeople = async (req, res) => {
   const entries = Array.isArray(req.body) ? req.body : [req.body];
 
@@ -50,10 +50,10 @@ const registerPeople = async (req, res) => {
     const results = await Promise.all(entries.map(async (entry) => {
       const { email, name, teamName, teamRole } = entry;
 
-      // Verificar si la persona ya existe.
+      // Check if the person already exists.
       let person = await Person.findOne({ where: { email } });
 
-      // Si la persona no existe, registrarla. Si existe, actualizarla.
+      // If the person does not exist, register them. If they exist, update them.
       if (!person) {
         person = await registerPerson(email, name, teamName, teamRole);
         return { email, teamName, status: 'registered' };

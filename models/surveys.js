@@ -12,7 +12,7 @@ const Survey = sequelize.define('survey', {
     allowNull: false,
     unique: true,
     validate: {
-      is: /^\d{2}\.\d{2}$/, // Validar el formato MM.YY
+      is: /^\d{2}\.\d{2}$/, // Validate name format as MM.YY
     }
   },
   date_start: {

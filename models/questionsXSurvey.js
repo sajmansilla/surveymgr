@@ -9,7 +9,7 @@ QuestionsXSurvey.init({
     allowNull: false,
     primaryKey: true,
     references: {
-      model: 'surveys', // Nombre de la tabla de la entidad Survey
+      model: 'surveys',
       key: 'id',
     },
     onDelete: 'CASCADE',
@@ -19,7 +19,7 @@ QuestionsXSurvey.init({
     allowNull: false,
     primaryKey: true,
     references: {
-      model: 'questions', // Nombre de la tabla de la entidad Question
+      model: 'questions',
       key: 'id',
     },
     onDelete: 'CASCADE',
@@ -28,7 +28,7 @@ QuestionsXSurvey.init({
   sequelize,
   modelName: 'QuestionsXSurvey',
   tableName: 'questions_x_survey',
-  timestamps: true, // Si no necesitas timestamps
+  timestamps: true,
 });
 
 module.exports = QuestionsXSurvey;

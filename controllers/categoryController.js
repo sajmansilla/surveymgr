@@ -1,6 +1,6 @@
 const { Category } = require('../models');
 
-// Endpoint para crear una nueva categoría.
+// Endpoint to create a new category.
 const createCategory = async (req, res) => {
   const { category_name, category_description } = req.body;
 

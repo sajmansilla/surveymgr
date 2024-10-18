@@ -1,20 +1,20 @@
 const { Survey, Team, Person, ParticipXSurvey, QuestionsXSurvey, Question } = require('../models');
 const crypto = require('crypto');
-const { getTeam } = require('./teamController'); // Utilizaremos esta función para verificar la existencia de equipos.
+const { getTeam } = require('./teamController');
 
 const createSurvey = async (req, res) => {
   const { name, date_start, date_end, teams } = req.body;
 
   try {
-    // Validar el formato del nombre de la encuesta
+    // Survey name validation
     if (!/^\d{2}\.\d{2}$/.test(name)) {
       return res.status(400).json({ message: 'Invalid survey name format. Use MM.YY.' });
     }
 
-    // Crear la nueva survey
+    // Survey creation
     const survey = await Survey.create({ name, date_start, date_end });
 
-    // Verificar la existencia de los equipos.
+    // Check existing teams.
     const nonexistentTeams = [];
     const existingTeams = [];
 
@@ -27,9 +27,9 @@ const createSurvey = async (req, res) => {
       }
     }
 
-    // Iterar sobre los equipos existentes y crear relaciones en `particip_x_survey`.
+    // Add people to survey.
     for (const team of existingTeams) {
-      // Obtener los participantes del equipo.
+      // Get people from teams.
       const persons = await Person.findAll({ 
         include: [{
           model: Team,
@@ -37,7 +37,7 @@ const createSurvey = async (req, res) => {
         }]
       });
 
-      // Crear una relación por cada participante.
+      // Add participant to survey.
       for (const person of persons) {
         const participantHash = crypto.createHash('sha256').update(person.email).digest('hex');
 
@@ -49,12 +49,12 @@ const createSurvey = async (req, res) => {
       }
     }
 
-    // ** NUEVO PASO: Relacionar preguntas habilitadas con la nueva encuesta **
+    // Automatically map enabled questions to the new survey
     const enabledQuestions = await Question.findAll({
       where: { enabled: true }
     });
 
-    // Crear relaciones en la tabla `questions_x_survey`
+    // Create relationships in `questions_x_survey`
     for (const question of enabledQuestions) {
       await QuestionsXSurvey.create({
         survey_id: survey.id,
@@ -62,7 +62,7 @@ const createSurvey = async (req, res) => {
       });
     }
 
-    // Devolver la respuesta con los equipos inexistentes, si los hay.
+    // Send response, including any nonexistent team that has been provided.
     res.status(201).json({
       message: 'Survey created successfully',
       survey,
@@ -72,9 +72,13 @@ const createSurvey = async (req, res) => {
   } catch (error) {
     console.error('Error creating survey:', error);
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ message: 'Survey with this name already exists' });
+      return res.status(400).json({
+        message: 'Survey with this name already exists'
+      });
     }
-    res.status(500).json({ message: 'An error occurred', error: error.message });
+    res.status(500).json({
+      message: 'An error occurred', error: error.message
+    });
   }
 };
 

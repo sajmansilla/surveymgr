@@ -21,7 +21,7 @@ Participant.init({
 }, {
   sequelize,
   modelName: 'Participant',
-  tableName: 'participants', // Cambia esto si es necesario
+  tableName: 'participants',
   timestamps: true
 });
 
