@@ -1,7 +1,6 @@
-const { Survey, Team, Person, ParticipXSurvey } = require('../models');
+const { Survey, Team, Person, ParticipXSurvey, QuestionsXSurvey, Question } = require('../models');
 const crypto = require('crypto');
 const { getTeam } = require('./teamController'); // Utilizaremos esta función para verificar la existencia de equipos.
-
 
 const createSurvey = async (req, res) => {
   const { name, date_start, date_end, teams } = req.body;
@@ -48,6 +47,19 @@ const createSurvey = async (req, res) => {
           team_id: team.id,
         });
       }
+    }
+
+    // ** NUEVO PASO: Relacionar preguntas habilitadas con la nueva encuesta **
+    const enabledQuestions = await Question.findAll({
+      where: { enabled: true }
+    });
+
+    // Crear relaciones en la tabla `questions_x_survey`
+    for (const question of enabledQuestions) {
+      await QuestionsXSurvey.create({
+        survey_id: survey.id,
+        question_id: question.id
+      });
     }
 
     // Devolver la respuesta con los equipos inexistentes, si los hay.
