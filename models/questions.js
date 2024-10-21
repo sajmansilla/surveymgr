@@ -34,11 +34,16 @@ Question.init({
   calc_method: {
     type: DataTypes.STRING,
   },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  }
 }, {
   sequelize,
   modelName: 'Question',
   tableName: 'questions',
-  timestamps: true
+  timestamps: true,
+  paranoid: true
 });
 
 // Definir la relación con Category.

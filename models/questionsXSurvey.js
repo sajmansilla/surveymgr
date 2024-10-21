@@ -25,12 +25,17 @@ QuestionsXSurvey.init({
       key: 'id',
     },
     onDelete: 'CASCADE',
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
 }, {
   sequelize,
   modelName: 'QuestionsXSurvey',
   tableName: 'questions_x_survey',
   timestamps: true,
+  paranoid: true
 });
 
 // Definir las relaciones.

@@ -1,15 +1,15 @@
-const { Participant, Team, Person } = require('../models');
+const { Member, Team, Person } = require('../models');
 
 // Function to link person to a team
-const addParticipant = async (personId, teamId, role) => {
+const addMember = async (personId, teamId, role) => {
   try {
 
-    let participant = await Participant.findOne({
+    let member = await Member.findOne({
       where: { team_id: teamId, person_id: personId },
     });
 
-    if (!participant) {
-      participant = await Participant.create({
+    if (!member) {
+      member = await Member.create({
         team_id: teamId,
         person_id: personId,
         role: role
@@ -19,11 +19,11 @@ const addParticipant = async (personId, teamId, role) => {
       console.log(`Participant already exists: person ${personId} in team ${teamId}`);
     }
 
-    return participant;
+    return member;
   } catch (error) {
-    console.error('Error adding participant:', error);
+    console.error('Error adding team member:', error);
     throw error;
   }
 };
 
-module.exports = { addParticipant };
+module.exports = { addMember };

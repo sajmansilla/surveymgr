@@ -1,5 +1,5 @@
 const { Person, Team } = require('../models');
-const { addParticipant } = require('./participantController');
+const { addMember } = require('./teammemberController');
 const { fixTeam } = require('./teamController');
 
 // Function to create a new person
@@ -18,7 +18,7 @@ const registerPerson = async (email, name, teamName, teamRole) => {
   const person = await Person.create({ email, name });
 
   if (team) {
-    await addParticipant(person.id, team.id, teamRole);
+    await addMember(person.id, team.id, teamRole);
   }
 
   return person;
@@ -36,7 +36,7 @@ const updatePerson = async (person, name, teamName, teamRole) => {
       throw new Error('Role is required when team is specified.');
     }
     // Add or update the person as a participant in the team with a role.
-    await addParticipant(person.id, team.id, teamRole);
+    await addMember(person.id, team.id, teamRole);
   }
 
   return person;

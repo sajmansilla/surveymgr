@@ -16,12 +16,17 @@ Category.init({
   category_description: {
     type: DataTypes.TEXT,
     allowNull: true,
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
 }, {
   sequelize,
   modelName: 'Category',
   tableName: 'categories',
   timestamps: true,
+  paranoid: true
 });
 
 module.exports = Category;

@@ -3,9 +3,9 @@ const { sequelize } = require('../db');
 const Team = require('./teams');
 const Person = require('./people');
 
-class Participant extends Model {}
+class Member extends Model {}
 
-Participant.init({
+Member.init({
   team_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -19,16 +19,21 @@ Participant.init({
   role: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
 }, {
   sequelize,
-  modelName: 'Participant',
-  tableName: 'participants',
+  modelName: 'Member',
+  tableName: 'team_members',
   timestamps: true,
+  paranoid: true
 });
 
 // Definir las relaciones entre Team y Person a través de Participant.
-Team.belongsToMany(Person, { through: Participant, foreignKey: 'team_id' });
-Person.belongsToMany(Team, { through: Participant, foreignKey: 'person_id' });
+Team.belongsToMany(Person, { through: Member, foreignKey: 'team_id' });
+Person.belongsToMany(Team, { through: Member, foreignKey: 'person_id' });
 
-module.exports = Participant;
+module.exports = Member;

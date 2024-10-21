@@ -9,11 +9,16 @@ Team.init({
     unique: true,
     allowNull: false,
   },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
+  }
 }, {
   sequelize,
   modelName: 'Team',
   tableName: 'teams',
   timestamps: true,
+  paranoid: true
 });
 
 module.exports = Team;

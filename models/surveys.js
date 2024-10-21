@@ -24,12 +24,17 @@ Survey.init({
   date_end: {
     type: DataTypes.DATEONLY,
     allowNull: false,
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
 }, {
   sequelize,
   modelName: 'Survey',
   tableName: 'surveys',
   timestamps: true,
+  paranoid: true
 });
 
 module.exports = Survey;

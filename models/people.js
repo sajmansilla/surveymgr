@@ -18,12 +18,17 @@ Person.init({
     type: DataTypes.STRING,
     unique: true,
     allowNull: false,
+  },
+  deleted_at: {
+    type: DataTypes.DATE,
+    allowNull: true,
   }
 }, {
   sequelize,
   modelName: 'Person',
   tableName: 'people',
   timestamps: true,
+  paranoid: true
 });
 
 module.exports = Person;

@@ -4,6 +4,7 @@ const personRoutes = require('./routes/personRoutes');
 const surveyRoutes = require('./routes/surveyRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const questionRoutes = require('./routes/questionRoutes');
+const responseRoutes = require('./routes/responseRoutes');
 const { sequelize } = require('./db');
 
 const app = express();
@@ -16,6 +17,7 @@ app.use('/api', personRoutes);
 app.use('/api', surveyRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', questionRoutes);
+app.use('/api', responseRoutes)
 
 // Sync DB and start the server
 sequelize.sync().then(() => {
