@@ -17,7 +17,9 @@ const registerResponse = async (req, res) => {
   });
 
   if (!participant) {
-    return res.status(400).json({ message: 'The email '+ email +' does not belong to Team'+ team_id +'.' });
+    return res.status(400).json({
+      message: 'The email '+ email +' does not belong to Team'+ team_id +'.'
+    });
   };
 
   const participantHash = crypto.createHash('sha256').update(`${person.email}-${participant.team_id}`).digest('hex');
@@ -25,19 +27,19 @@ const registerResponse = async (req, res) => {
   try {
     // Verify existent team_id
     const team = await Team.findByPk(team_id);
-    if (!team || team.deleted_at !== null) {
+    if (!team || team.deletedAt !== null) {
       return res.status(400).json({ message: 'Team not found' });
     }
 
     // Verify existent survey_id
     const survey = await Survey.findByPk(survey_id);
-    if (!survey || survey.deleted_at !== null) {
+    if (!survey || survey.deletedAt !== null) {
       return res.status(400).json({ message: 'Survey not found' });
     }
 
     // Verify existent question_id
     const question = await Question.findByPk(question_id);
-    if (!question || question.deleted_at !== null) {
+    if (!question || question.deletedAt !== null) {
       return res.status(400).json({ message: 'Question not found' });
     }
 
