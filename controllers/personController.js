@@ -70,4 +70,26 @@ const registerPeople = async (req, res) => {
   }
 };
 
-module.exports = { registerPeople };
+const destroyPerson = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Person.destroy({ where: { id } });
+    res.status(200).json({ message: 'Person deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting person', error: error.message });
+  }
+};
+
+const restorePerson = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Person.restore({ where: { id } });
+    res.status(200).json({ message: 'Person restored successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error restoring person', error: error.message });
+  }
+};
+
+module.exports = { registerPeople, destroyPerson, restorePerson };

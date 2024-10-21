@@ -57,4 +57,28 @@ const registerResponse = async (req, res) => {
   }
 };
 
-module.exports = { registerResponse };
+// Soft delete a response by ID
+const destroyResponse = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Response.destroy({ where: { id } });
+    res.status(200).json({ message: 'Response deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting response', error: error.message });
+  }
+};
+
+// Restore a soft-deleted response by ID
+const restoreResponse = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Response.restore({ where: { id } });
+    res.status(200).json({ message: 'Response restored successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error restoring response', error: error.message });
+  }
+};
+
+module.exports = { registerResponse, destroyResponse, restoreResponse };

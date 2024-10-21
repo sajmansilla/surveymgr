@@ -33,4 +33,27 @@ const createQuestions = async (req, res) => {
   }
 };
 
-module.exports = { createQuestions };
+const destroyQuestion = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Question.destroy({ where: { id } });
+    res.status(200).json({ message: 'Question deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting question', error: error.message });
+  }
+};
+
+const restoreQuestion = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Question.restore({ where: { id } });
+    res.status(200).json({ message: 'Question restored successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error restoring question', error: error.message });
+  }
+};
+
+
+module.exports = { createQuestions, destroyQuestion, restoreQuestion };

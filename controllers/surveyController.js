@@ -82,4 +82,27 @@ const createSurvey = async (req, res) => {
   }
 };
 
-module.exports = { createSurvey };
+const destroySurvey = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Survey.destroy({ where: { id } });
+    res.status(200).json({ message: 'Survey deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting survey', error: error.message });
+  }
+};
+
+const restoreSurvey = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Survey.restore({ where: { id } });
+    res.status(200).json({ message: 'Survey restored successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error restoring survey', error: error.message });
+  }
+};
+
+
+module.exports = { createSurvey, destroySurvey, restoreSurvey };

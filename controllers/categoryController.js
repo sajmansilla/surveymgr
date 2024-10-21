@@ -13,4 +13,26 @@ const createCategory = async (req, res) => {
   }
 };
 
-module.exports = { createCategory };
+const destroyCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Category.destroy({ where: { id } });
+    res.status(200).json({ message: 'Category deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting category', error: error.message });
+  }
+};
+
+const restoreCategory = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await Category.restore({ where: { id } });
+    res.status(200).json({ message: 'Category restored successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error restoring category', error: error.message });
+  }
+};
+
+module.exports = { createCategory, destroyCategory, restoreCategory };

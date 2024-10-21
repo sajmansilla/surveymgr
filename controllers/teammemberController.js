@@ -26,4 +26,27 @@ const addMember = async (personId, teamId, role) => {
   }
 };
 
-module.exports = { addMember };
+const destroyMember = async (req, res) => {
+  const { team_id, person_id } = req.body;
+
+  try {
+    await Member.destroy({ where: { team_id, person_id } });
+    res.status(200).json({ message: 'Team member deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting team member', error: error.message });
+  }
+};
+
+const restoreMember = async (req, res) => {
+  const { team_id, person_id } = req.body;
+
+  try {
+    await Member.restore({ where: { team_id, person_id } });
+    res.status(200).json({ message: 'Team member restored successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error restoring team member', error: error.message });
+  }
+};
+
+
+module.exports = { addMember, destroyMember, restoreMember };
