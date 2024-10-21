@@ -1,23 +1,37 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
+const Survey = require('./surveys');
+const Team = require('./teams');
 
 class ParticipXSurvey extends Model {}
 
 ParticipXSurvey.init({
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
   survey_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    references: {
+      model: 'surveys',
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
   },
   participant: {
     type: DataTypes.STRING,
     allowNull: false,
-    primaryKey: true
   },
   team_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    primaryKey: true
+    references: {
+      model: 'teams',
+      key: 'id',
+    },
+    onDelete: 'CASCADE',
   }
 }, {
   sequelize,
@@ -30,5 +44,9 @@ ParticipXSurvey.init({
     },
   ],
 });
+
+// Definir las relaciones.
+ParticipXSurvey.belongsTo(Survey, { foreignKey: 'survey_id' });
+ParticipXSurvey.belongsTo(Team, { foreignKey: 'team_id' });
 
 module.exports = ParticipXSurvey;

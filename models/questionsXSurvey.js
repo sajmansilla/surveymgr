@@ -1,5 +1,7 @@
 const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
+const Survey = require('./surveys');
+const Question = require('./questions');
 
 class QuestionsXSurvey extends Model {}
 
@@ -30,5 +32,9 @@ QuestionsXSurvey.init({
   tableName: 'questions_x_survey',
   timestamps: true,
 });
+
+// Definir las relaciones.
+Survey.belongsToMany(Question, { through: QuestionsXSurvey, foreignKey: 'survey_id' });
+Question.belongsToMany(Survey, { through: QuestionsXSurvey, foreignKey: 'question_id' });
 
 module.exports = QuestionsXSurvey;
