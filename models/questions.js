@@ -38,6 +38,7 @@ Question.init({
   sequelize,
   modelName: 'Question',
   tableName: 'questions',
+  timestamps: true
 });
 
 // Definir la relación con Category.

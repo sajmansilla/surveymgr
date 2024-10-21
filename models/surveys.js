@@ -1,7 +1,9 @@
-const { DataTypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const { sequelize } = require('../db');
 
-const Survey = sequelize.define('survey', {
+class Survey extends Model {}
+
+Survey.init({
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -24,7 +26,10 @@ const Survey = sequelize.define('survey', {
     allowNull: false,
   }
 }, {
+  sequelize,
+  modelName: 'Survey',
   tableName: 'surveys',
+  timestamps: true,
 });
 
 module.exports = Survey;

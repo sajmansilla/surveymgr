@@ -37,6 +37,7 @@ ParticipXSurvey.init({
   sequelize,
   modelName: 'ParticipXSurvey',
   tableName: 'particip_x_survey',
+  timestamps: true,
   indexes: [
     {
       unique: true,
