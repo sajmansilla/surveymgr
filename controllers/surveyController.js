@@ -39,7 +39,7 @@ const createSurvey = async (req, res) => {
 
       // Add participant to survey.
       for (const person of persons) {
-        const participantHash = crypto.createHash('sha256').update(person.email).digest('hex');
+        const participantHash = crypto.createHash('sha256').update(`${person.email}-${team.id}`).digest('hex');
 
         await ParticipXSurvey.create({
           survey_id: survey.id,
