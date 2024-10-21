@@ -19,10 +19,6 @@ Member.init({
   role: {
     type: DataTypes.STRING,
     allowNull: false,
-  },
-  deleted_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   }
 }, {
   sequelize,

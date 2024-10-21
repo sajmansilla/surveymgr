@@ -24,10 +24,6 @@ Survey.init({
   date_end: {
     type: DataTypes.DATEONLY,
     allowNull: false,
-  },
-  deleted_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   }
 }, {
   sequelize,

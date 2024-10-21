@@ -43,10 +43,6 @@ Response.init({
   answer: {
     type: DataTypes.TEXT,
     allowNull: false,
-  },
-  deleted_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   }
 }, {
   sequelize,

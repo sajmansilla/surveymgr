@@ -1,9 +1,26 @@
-const { Response, Team, Survey, Question } = require('../models');
+const { Response, Team, Survey, Question, Person, Member } = require('../models');
+const crypto = require('crypto');
 
 const registerResponse = async (req, res) => {
   const { team_id, email, survey_id, question_id, answer } = req.body;
 
-  const participantHash = crypto.createHash('sha256').update(`${email}-${team.id}`).digest('hex');
+  let person = await Person.findOne({
+    where: { email: email },
+  });
+
+  if (!person) {
+    return res.status(400).json({ message: 'E-mail '+ email +' not found' });
+  };
+
+  const participant = await Member.findOne({
+    where: { team_id: team_id, person_id: person.id },
+  });
+
+  if (!participant) {
+    return res.status(400).json({ message: 'The email '+ email +' does not belong to Team'+ team_id +'.' });
+  };
+
+  const participantHash = crypto.createHash('sha256').update(`${person.email}-${participant.team_id}`).digest('hex');
 
   try {
     // Verify existent team_id
@@ -27,7 +44,7 @@ const registerResponse = async (req, res) => {
     // Create reponse
     const newResponse = await Response.create({
       team_id,
-      participantHash,
+      participant: participantHash,
       survey_id,
       question_id,
       answer,

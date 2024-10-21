@@ -25,10 +25,6 @@ QuestionsXSurvey.init({
       key: 'id',
     },
     onDelete: 'CASCADE',
-  },
-  deleted_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   }
 }, {
   sequelize,

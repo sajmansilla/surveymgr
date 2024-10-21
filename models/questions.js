@@ -33,10 +33,6 @@ Question.init({
   },
   calc_method: {
     type: DataTypes.STRING,
-  },
-  deleted_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   }
 }, {
   sequelize,

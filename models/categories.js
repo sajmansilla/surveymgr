@@ -16,10 +16,6 @@ Category.init({
   category_description: {
     type: DataTypes.TEXT,
     allowNull: true,
-  },
-  deleted_at: {
-    type: DataTypes.DATE,
-    allowNull: true,
   }
 }, {
   sequelize,
